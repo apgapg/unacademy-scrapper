@@ -87,9 +87,14 @@ for item in topicList:
     with open(f"{topic}/{title} {id}.pdf", "wb") as f:
         f.write(img2pdf.convert(imgs))
     
+    newTitle=title.replace('Quality Numerical ','')
     filePath=f"{topic}/{title} {id}.pdf"
+    filePathBlob=f"{topic}/{newTitle} {id}.pdf"
 
-    newBlob = bucket.blob(f'chapter-pdf/{filePath}')
+    print(filePathBlob)
+
+
+    newBlob = bucket.blob(f'chapter-pdf/{filePathBlob}')
     newBlob.upload_from_filename(filePath, content_type='application/pdf')
     newBlob.make_public()
 

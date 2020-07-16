@@ -12,8 +12,8 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 subject = 'Physics'
-topic = 'Wave Optics'
-courseUrl = 'https://unacademy.com/course/wave-optics-for-iit-jee/MTSGZDXU'
+topic = 'Simple Harmonic Motion'
+courseUrl = 'https://unacademy.com/course/simple-harmonic-motion-for-iit-jee/8U80RYEN'
 
 courseUid = courseUrl.split('/')[5]
 print('course UID: ', courseUid)

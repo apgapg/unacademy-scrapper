@@ -19,13 +19,13 @@ db = firestore.client()
 bucket = storage.bucket()
 
 
-# topic = input("Enter Course Name: ")
-# if not topic:
-#     exit('topic can\'t be empty of null')
+topic = input("Enter Course Name: ")
+if not topic:
+    exit('topic can\'t be empty of null')
 
-docs = db.collection('courses').stream()
+docs = db.collection('courses').where(u'topic', u'==', topic).stream()
 
-chapters = list(docs)[12:15]
+chapters = list(docs)
 
 for chapter in chapters:
     #chapter = list(docs)[0]
@@ -38,43 +38,44 @@ for chapter in chapters:
 
     newTopics = list(topics)
 
-    for i, item in enumerate(topics):
+    for j, item in enumerate(newTopics):
         id = item['id']
         name = item['title']
         print('id: ', id)
         images = item['images']
         for i, img in enumerate(images):
-            if 'firebasestorage' not in img:
+            if 'firebasestorage' not in img and 'googleapis' not in img:
                 print(img)
+                # timeStamp = int(time.time()*1000)
                 filePath = f'{topic}/{id}/solution_{i}.jpeg'
                 if not os.path.exists(f'{topic}/{id}'):
                     os.makedirs(f'{topic}/{id}')
                 if not os.path.exists(filePath):
+                    time.sleep(2)
                     urlretrieve(img, f"{filePath}")
                 else:
                     print('image already exist')
                 newBlob = bucket.blob(f'Physics/{filePath}')
-                if not newBlob.exists():
-                    newBlob.upload_from_filename(
-                        filePath, content_type='image/jpeg')
-                    newBlob.make_public()
-                else:
-                    print('blob already exists!')
+                # if not newBlob.exists():
+                newBlob.upload_from_filename(
+                    filePath, content_type='image/jpeg')
+                newBlob.make_public()
+                # else:
+                #     print('blob already exists!')
+                # newBlob.make_public()
                 url = newBlob.public_url
                 print(url)
-                images.pop(i)
-                images.insert(i, url)
+                images[i] = url
 
         # print(solns)
         item.update({'images': images})
-        newTopics.pop(i)
-        newTopics.insert(i, item)
+        newTopics[j] = item
 
     print(newTopics)
     if len(newTopics) != 0:
         chapter_ref = db.collection(u'courses').document(chapter.id)
         chapter_ref.update({'topics': newTopics})
-        print(f'chapter {topic} updated!')
+        print(f'chapter: {topic} updated!')
     else:
         print('list cannot empty')
         print(f'chapter {topic} not updated!')

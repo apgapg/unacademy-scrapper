@@ -11,6 +11,21 @@ from firebase_admin import storage
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+os.system("")
+
+# Group of Different functions for different styles
+class style():
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    UNDERLINE = '\033[4m'
+    RESET = '\033[0m'
+
 
 topic = input("Enter Course Name: ")
 if not topic:
@@ -32,7 +47,7 @@ docs = db.collection('courses').where('topic', '==', f'{topic}').stream()
 
 chapter = list(docs)[0]
 topicList=list(chapter.to_dict()['topics'])
-print('Found', f'{len(topicList)} chapters...')
+print(style.BLUE+'Found', f'{len(topicList)} chapters...')
 
 
 def addWatermark(imagePath):
@@ -55,23 +70,23 @@ def addWatermark(imagePath):
 
 for item in topicList:
     id=item.get('id')
-    imgUrls1 = item.get("images")
+    #imgUrls1 = item.get("images")
     imgUrls = list(item.get('images'))
-    imgUrls.extend(list(imgUrls1))
+    #imgUrls.extend(list(imgUrls1))
     imgUrls.insert(0, defaultCover)
     print(imgUrls)
     title = item.get("title")
 
     imgs = []
     for i, j in enumerate(imgUrls):
-        print("downloading %s" % (j))
+        print(style.BLUE+"downloading %s" % (j))
         if not os.path.exists(topic+'/'+title):
             if not os.path.exists(topic):
                 os.mkdir(topic)
             os.mkdir(topic+'/'+title)
-            print("Directory ", topic+'/'+title,  " Created ")
+            print(style.BLUE+"Directory ", topic+'/'+title,  " Created ")
         else:
-            print("Directory ", topic+'/'+title,  " already exists")
+            print(style.YELLOW+"Directory ", topic+'/'+title,  " already exists")
         fullfilename = os.path.join(f'{topic}/{title}', f'{i}.jpeg')
         if not os.path.exists(fullfilename):
             urlretrieve(j, f"{fullfilename}")
@@ -80,9 +95,9 @@ for item in topicList:
         imgs.append(fullfilename)
 
         # if not os.path.exists(f"{topic}/{title} {item.id}.pdf"):
-        if os.path.getsize(fullfilename) == 72032:
-            imgs.remove(fullfilename)
-            print('Ignored: ', fullfilename)
+        # if os.path.getsize(fullfilename) == 72032:
+        #     imgs.remove(fullfilename)
+        #     print('Ignored: ', fullfilename)
 
     with open(f"{topic}/{title} {id}.pdf", "wb") as f:
         f.write(img2pdf.convert(imgs))
@@ -91,7 +106,7 @@ for item in topicList:
     filePath=f"{topic}/{title} {id}.pdf"
     filePathBlob=f"{topic}/{newTitle} {id}.pdf"
 
-    print(filePathBlob)
+    print(style.BLUE+filePathBlob)
 
 
     newBlob = bucket.blob(f'chapter-pdf/{filePathBlob}')

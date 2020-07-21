@@ -47,11 +47,11 @@ for chapter in chapters:
             if 'firebasestorage' not in img and 'googleapis' not in img:
                 print(img)
                 # timeStamp = int(time.time()*1000)
-                filePath = f'{topic}/{id}/solution_{i}.jpeg'
+                filePath = f'{topic}/{id}/{id} solution_{i}.jpeg'
                 if not os.path.exists(f'{topic}/{id}'):
                     os.makedirs(f'{topic}/{id}')
                 if not os.path.exists(filePath):
-                    time.sleep(2)
+                    time.sleep(1)
                     urlretrieve(img, f"{filePath}")
                 else:
                     print('image already exist')

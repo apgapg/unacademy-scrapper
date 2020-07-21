@@ -12,8 +12,8 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 subject = 'Physics'
-topic = 'Simple Harmonic Motion'
-courseUrl = 'https://unacademy.com/course/simple-harmonic-motion-for-iit-jee/8U80RYEN'
+topic = 'Magnetism'
+courseUrl = 'https://unacademy.com/course/magnetism-875/4BK3B3EL'
 
 courseUid = courseUrl.split('/')[5]
 print('course UID: ', courseUid)
@@ -46,9 +46,9 @@ for name in nameList:
     imgSeq = list(
         map(lambda x: 'https://edge.uacdn.net/%s/images/%s.jpeg' % (uid, x), rawImgSeq2))
     print(imgSeq)
-    print('Found images: ',len(imgSeq))
+    print('Found images: ', len(imgSeq))
     myTopic = {
-        'id':uid,
+        'id': uid,
         'title': title,
         'video': url,
         'images': imgSeq,
